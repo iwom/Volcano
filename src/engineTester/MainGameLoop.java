@@ -10,6 +10,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 import shaders.StaticShader;
+import terrain.Terrain;
 import textures.ModelTexture;
 
 import java.util.ArrayList;
@@ -21,15 +22,19 @@ public class MainGameLoop {
 
         DisplayManager.createDisplay();
         Loader loader = new Loader();
-        /*StaticShader shader = new StaticShader();
-        Renderer renderer = new Renderer(shader);*/
 
         RawModel model = OBJLoader.loadObjModel("vol3", loader);
         ModelTexture texture = new ModelTexture(loader.loadTexture("bamboo"));
         texture.setShineDamper(20);
         texture.setReflectivity(1);
-        TexturedModel texturedModel = new TexturedModel(model, texture);
-        //Entity entity = new Entity(texturedModel, new Vector3f(0,0,-18f), 0,0,0,1f);
+        TexturedModel volcanoModel = new TexturedModel(model, texture);
+
+        Terrain terrain0 = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("grass")));
+        Terrain terrain1 = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
+        Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grass")));
+        Terrain terrain3 = new Terrain(-1, 0, loader, new ModelTexture(loader.loadTexture("grass")));
+
+
         Light light = new Light(new Vector3f(0,40,-10), new Vector3f(1,1,1));
         Camera camera = new Camera();
 
@@ -38,9 +43,9 @@ public class MainGameLoop {
 
         for(int i = 0; i < 1; i++) {
             float x = 0.0f;
-            float y = -4.0f;
+            float y = 0.0f;
             float z = -10.0f;
-            entities.add(new Entity(texturedModel, new Vector3f(x,y,z),
+            entities.add(new Entity(volcanoModel, new Vector3f(x,y,z),
                     0,0,0,1));
         }
 
@@ -48,16 +53,14 @@ public class MainGameLoop {
         while(!Display.isCloseRequested()) {
 
             camera.move();
-            /*renderer.prepare();
-            shader.start();
-            shader.loadLight(light);
-            shader.loadViewMatrix(camera);*/
             for(Entity entity: entities) {
-                /*renderer.render(entity, shader);*/
+                renderer.processTerrain(terrain0);
+                renderer.processTerrain(terrain1);
+                renderer.processTerrain(terrain2);
+                renderer.processTerrain(terrain3);
                 renderer.processEntity(entity);
             }
             renderer.render(light, camera);
-            /*shader.stop();*/
             DisplayManager.updateDisplay();
         }
         renderer.cleanUp();
