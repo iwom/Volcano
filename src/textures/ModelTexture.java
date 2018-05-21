@@ -5,8 +5,8 @@ public class ModelTexture {
 
     private float shineDamper = 1;
     private float reflectivity = 0;
-
-
+    private boolean transparent = false;
+    private boolean fakeLightning = false;
 
     public ModelTexture(int id) {
         this.textureId = id;
@@ -31,4 +31,20 @@ public class ModelTexture {
     public void setReflectivity(float reflectivity) {
         this.reflectivity = reflectivity;
     }
+
+    public boolean isTransparent() {
+        return transparent;
+    }
+
+    public void setTransparent(boolean transparent) {
+        this.transparent = transparent;
+    }
+    public boolean isFakeLightning() {
+        return fakeLightning;
+    }
+
+    public void setFakeLightning(boolean fakeLightning) {
+        this.fakeLightning = fakeLightning;
+    }
+
 }

@@ -7,9 +7,7 @@ import game.*;
 import models.RawModel;
 import models.TexturedModel;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
-import shaders.StaticShader;
 import terrain.Terrain;
 import textures.ModelTexture;
 
@@ -23,11 +21,18 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
         Loader loader = new Loader();
 
-        RawModel model = OBJLoader.loadObjModel("vol3", loader);
-        ModelTexture texture = new ModelTexture(loader.loadTexture("bamboo"));
-        texture.setShineDamper(20);
-        texture.setReflectivity(1);
-        TexturedModel volcanoModel = new TexturedModel(model, texture);
+        RawModel volcanoRawModel = OBJLoader.loadObjModel("vol3", loader);
+        ModelTexture volacnoTexture = new ModelTexture(loader.loadTexture("bamboo"));
+        volacnoTexture.setShineDamper(20);
+        volacnoTexture.setReflectivity(0);
+        TexturedModel volcanoModel = new TexturedModel(volcanoRawModel, volacnoTexture);
+
+
+        RawModel grassRawModel = OBJLoader.loadObjModel("grassModel", loader);
+        ModelTexture grassTexture = new ModelTexture(loader.loadTexture("grassTexture"));
+        grassTexture.setTransparent(true);
+        grassTexture.setFakeLightning(true);
+        TexturedModel grassModel = new TexturedModel(grassRawModel, grassTexture);
 
         Terrain terrain0 = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("grass")));
         Terrain terrain1 = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
@@ -41,23 +46,26 @@ public class MainGameLoop {
         List<Entity> entities = new ArrayList<Entity>();
         Random random = new Random();
 
-        for(int i = 0; i < 1; i++) {
-            float x = 0.0f;
-            float y = 0.0f;
-            float z = -10.0f;
-            entities.add(new Entity(volcanoModel, new Vector3f(x,y,z),
-                    0,0,0,1));
+        float x = 0.0f;
+        float y = -2.0f;
+        float z = -10.0f;
+        entities.add(new Entity(volcanoModel, new Vector3f(x,y,z),
+                0,0,0,1));
+
+        for(int i = 0; i < 1000; i++) {
+            entities.add(new Entity(grassModel, new Vector3f(
+                    random.nextFloat() * 300 - 150, 0, random.nextFloat() * 300 -150), 0,0,0,0.8f
+            ));
         }
 
         MasterRenderer renderer = new MasterRenderer();
         while(!Display.isCloseRequested()) {
-
             camera.move();
+            renderer.processTerrain(terrain0);
+            renderer.processTerrain(terrain1);
+            renderer.processTerrain(terrain2);
+            renderer.processTerrain(terrain3);
             for(Entity entity: entities) {
-                renderer.processTerrain(terrain0);
-                renderer.processTerrain(terrain1);
-                renderer.processTerrain(terrain2);
-                renderer.processTerrain(terrain3);
                 renderer.processEntity(entity);
             }
             renderer.render(light, camera);
