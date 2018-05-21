@@ -30,14 +30,20 @@ public class Camera {
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
             position.y += 0.04f;
         }
-        if (Keyboard.isKeyDown(Keyboard.KEY_COMMA)) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
             position.y -= 0.04f;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-            yaw -= 0.2f;
+            yaw -= 0.5f;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-            yaw += 0.2f;
+            yaw += 0.5f;
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+            pitch -= 0.5f;
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+            pitch += 0.5f;
         }
 
     }

@@ -6,8 +6,8 @@ import org.lwjgl.opengl.*;
 
 public class DisplayManager {
 
-    private static final int WIDTH = 700;
-    private static final int HEIGHT = 700;
+    private static final int WIDTH = 900;
+    private static final int HEIGHT = 900;
     private static final int FPS_CAP = 120;
     public static void createDisplay() {
         ContextAttribs attribs = new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true);

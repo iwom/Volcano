@@ -24,24 +24,24 @@ public class MainGameLoop {
         /*StaticShader shader = new StaticShader();
         Renderer renderer = new Renderer(shader);*/
 
-        RawModel model = OBJLoader.loadObjModel("dragon", loader);
+        RawModel model = OBJLoader.loadObjModel("vol3", loader);
         ModelTexture texture = new ModelTexture(loader.loadTexture("bamboo"));
-        texture.setShineDamper(10);
+        texture.setShineDamper(20);
         texture.setReflectivity(1);
         TexturedModel texturedModel = new TexturedModel(model, texture);
         //Entity entity = new Entity(texturedModel, new Vector3f(0,0,-18f), 0,0,0,1f);
-        Light light = new Light(new Vector3f(0,15,20), new Vector3f(1,1,1));
+        Light light = new Light(new Vector3f(0,40,-10), new Vector3f(1,1,1));
         Camera camera = new Camera();
 
         List<Entity> entities = new ArrayList<Entity>();
         Random random = new Random();
 
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < 1; i++) {
             float x = 0.0f;
-            float y = 0.0f;
-            float z = random.nextFloat() * -70;
+            float y = -4.0f;
+            float z = -10.0f;
             entities.add(new Entity(texturedModel, new Vector3f(x,y,z),
-                    random.nextFloat() * 180f, random.nextFloat() * 180f, 0, random.nextFloat() % 1));
+                    0,0,0,1));
         }
 
         MasterRenderer renderer = new MasterRenderer();
