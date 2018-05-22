@@ -22,7 +22,7 @@ public class MainGameLoop {
         Loader loader = new Loader();
 
         RawModel volcanoRawModel = OBJLoader.loadObjModel("vol3", loader);
-        ModelTexture volacnoTexture = new ModelTexture(loader.loadTexture("bamboo"));
+        ModelTexture volacnoTexture = new ModelTexture(loader.loadTexture("gravel"));
         volacnoTexture.setShineDamper(20);
         volacnoTexture.setReflectivity(0);
         TexturedModel volcanoModel = new TexturedModel(volcanoRawModel, volacnoTexture);
