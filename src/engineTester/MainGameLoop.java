@@ -6,8 +6,13 @@ import entities.Light;
 import game.*;
 import models.RawModel;
 import models.TexturedModel;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
+import particles.Particle;
+import particles.ParticleMaster;
+import particles.ParticleSystem;
+import particles.ParticleTexture;
 import terrain.Terrain;
 import textures.ModelTexture;
 
@@ -28,6 +33,7 @@ public class MainGameLoop {
         TexturedModel volcanoModel = new TexturedModel(volcanoRawModel, volacnoTexture);
 
 
+
         RawModel grassRawModel = OBJLoader.loadObjModel("grassModel", loader);
         ModelTexture grassTexture = new ModelTexture(loader.loadTexture("grassTexture"));
         grassTexture.setTransparent(true);
@@ -38,6 +44,7 @@ public class MainGameLoop {
         Terrain terrain1 = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
         Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grass")));
         Terrain terrain3 = new Terrain(-1, 0, loader, new ModelTexture(loader.loadTexture("grass")));
+
 
 
         Light light = new Light(new Vector3f(0,40,-10), new Vector3f(1,1,1));
@@ -59,21 +66,41 @@ public class MainGameLoop {
         }
 
         MasterRenderer renderer = new MasterRenderer();
+
+        ParticleMaster.init(loader, renderer.getProjectionMatrix());
+        ParticleTexture particleTexture = new ParticleTexture(loader.loadTexture("particleAtlas"), 4);
+        ParticleSystem system = new ParticleSystem(particleTexture, 800, 0.3f, 0.5f, 0.04f);
+
         while(!Display.isCloseRequested()) {
             camera.move();
+
+            /*if(Keyboard.isKeyDown(Keyboard.KEY_Y)) {
+                 ParticleMaster.addParticle(new Particle(new Vector3f(entities.get(0).getPosition().x,
+                         entities.get(0).getPosition().y + 10.0f,
+                         entities.get(0).getPosition().z - 10.0f),
+                        new Vector3f(0,0.5f,0),
+                        1.0f,4.0f,0,1));
+
+            }*/
+            system.generateParticles(new Vector3f(entities.get(0).getPosition().x - 2.3f,
+                    entities.get(0).getPosition().y + 5.8f,
+                    entities.get(0).getPosition().z));
+            ParticleMaster.update();
+            for(Entity entity: entities) {
+                renderer.processEntity(entity);
+            }
+
+            renderer.render(light, camera);
+            ParticleMaster.renderParticles(camera);
             renderer.processTerrain(terrain0);
             renderer.processTerrain(terrain1);
             renderer.processTerrain(terrain2);
             renderer.processTerrain(terrain3);
-            for(Entity entity: entities) {
-                renderer.processEntity(entity);
-            }
-            renderer.render(light, camera);
             DisplayManager.updateDisplay();
         }
         renderer.cleanUp();
-        /*shader.cleanUp();*/
         loader.cleanUp();
+        ParticleMaster.cleanUp();
         DisplayManager.closeDisplay();
     }
 }

@@ -1,11 +1,12 @@
 package entities;
 
+import game.DisplayManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
-    private float CAMERA_SPEED;
+    private float CAMERA_SPEED = 0.05f;
     private float YAW_SPEED;
     private float PITCH_SPEED;
     private Vector3f position = new Vector3f(0,0.6f,0);
@@ -15,7 +16,6 @@ public class Camera {
 
     public Camera() {
         YAW_SPEED = 0.55f;
-        CAMERA_SPEED = 0.05f;
         PITCH_SPEED = 0.55f;
     }
 
@@ -78,7 +78,6 @@ public class Camera {
 
     private void calculateZoom() {
         float zoomLevel = Mouse.getDWheel() * 0.1f;
-
     }
 
     private void caluculatePitch() {

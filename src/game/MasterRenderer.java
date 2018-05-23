@@ -20,6 +20,7 @@ public class MasterRenderer {
     public static final float FOV = 70;
     public static final float NEAR_PLANE = 0.1f;
     public static final float FAR_PLANE = 1000;
+    public static final float GRAVITY = -50.0f;
 
     private Matrix4f projectionMatrix;
 
@@ -37,10 +38,16 @@ public class MasterRenderer {
         renderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
     }
+
+    public Matrix4f getProjectionMatrix() {
+        return projectionMatrix;
+    }
+
     public void render(Light light, Camera camera) {
         prepare();
         shader.start();
         shader.loadLight(light);
+
         shader.loadViewMatrix(camera);
         renderer.render(entities);
         shader.stop();
