@@ -52,7 +52,7 @@ public class MainGameLoop {
         Random random = new Random();
 
         float x = 0.0f;
-        float y = -2.0f;
+        float y = -4.0f;
         float z = -10.0f;
         entities.add(new Entity(volcanoModel, new Vector3f(x,y,z),
                 0,0,0,1));
