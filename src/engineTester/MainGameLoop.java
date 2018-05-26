@@ -9,10 +9,7 @@ import models.TexturedModel;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
-import particles.Particle;
-import particles.ParticleMaster;
-import particles.ParticleSystem;
-import particles.ParticleTexture;
+import particles.*;
 import terrain.Terrain;
 import textures.ModelTexture;
 
@@ -26,7 +23,7 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
         Loader loader = new Loader();
 
-        RawModel volcanoRawModel = OBJLoader.loadObjModel("vol3", loader);
+        RawModel volcanoRawModel = OBJLoader.loadObjModel("volcano", loader);
         ModelTexture volacnoTexture = new ModelTexture(loader.loadTexture("gravel"));
         volacnoTexture.setShineDamper(20);
         volacnoTexture.setReflectivity(0);
@@ -46,8 +43,9 @@ public class MainGameLoop {
         Terrain terrain3 = new Terrain(-1, 0, loader, new ModelTexture(loader.loadTexture("grass")));
 
 
-
-        Light light = new Light(new Vector3f(0,40,-10), new Vector3f(1,1,1));
+        List <Light> lights = new ArrayList<>();
+        lights.add(new Light(new Vector3f(0,40,0), new Vector3f(1,1,1)));
+        //lights.add(new Light(new Vector3f(50,40,-50), new Vector3f(0,1,0)));
         Camera camera = new Camera();
 
         List<Entity> entities = new ArrayList<Entity>();
@@ -59,38 +57,36 @@ public class MainGameLoop {
         entities.add(new Entity(volcanoModel, new Vector3f(x,y,z),
                 0,0,0,1));
 
-        for(int i = 0; i < 5000; i++) {
+        for(int i = 0; i < 1000; i++) {
             entities.add(new Entity(grassModel, new Vector3f(
-                    random.nextFloat() * 160 - 80, 0, random.nextFloat() * 160 - 80), 0,0,0,0.1f
+                    random.nextFloat() * 200 - 100, 0, random.nextFloat() * 200 - 100), 0,0,0,0.4f
             ));
         }
 
         MasterRenderer renderer = new MasterRenderer();
 
         ParticleMaster.init(loader, renderer.getProjectionMatrix());
-        ParticleTexture particleTexture = new ParticleTexture(loader.loadTexture("particleAtlas"), 4);
-        ParticleSystem system = new ParticleSystem(particleTexture, 3000, 0.24f, 0.5f, 0.03f);
-        int pps = 7000;
+        ParticleTexture lavaParticleTexture = new ParticleTexture(loader.loadTexture("particleAtlas"), 4);
+        ParticleTexture smokeParticleTexture = new ParticleTexture(loader.loadTexture("smoke"), 8);
+        ParticleSystem lavaSystem = new LavaSystem(lavaParticleTexture, 600, 0.25f, 0.55f, 0.027f);
+        ParticleSystem smokeSystem = new SmokeSystem(smokeParticleTexture, 150, 0.05f, 0.001f, 0.5f);
+
+        Vector3f volcanoPosition = entities.get(0).getPosition();
         while(!Display.isCloseRequested()) {
             camera.move();
 
-            if(Keyboard.isKeyDown(Keyboard.KEY_Y)) {
-                pps += 10;
-                system.setPps(pps);
-            }
-            if(Keyboard.isKeyDown(Keyboard.KEY_U)) {
-               pps -= 10;
-               system.setPps(pps);
-            }
-            system.generateParticles(new Vector3f(entities.get(0).getPosition().x - 2.3f,
-                    entities.get(0).getPosition().y + 5.8f,
-                    entities.get(0).getPosition().z));
+            lavaSystem.generateParticles(new Vector3f(volcanoPosition.x - 2.3f,
+                    volcanoPosition.y + 7.8f,
+                    volcanoPosition.z));
+            smokeSystem.generateParticles(new Vector3f(volcanoPosition.x - 2.3f,
+                    volcanoPosition.y + 9.9f,
+                    volcanoPosition.z));
             ParticleMaster.update();
             for(Entity entity: entities) {
                 renderer.processEntity(entity);
             }
 
-            renderer.render(light, camera);
+            renderer.render(lights, camera);
             ParticleMaster.renderParticles(camera);
             renderer.processTerrain(terrain0);
             renderer.processTerrain(terrain1);

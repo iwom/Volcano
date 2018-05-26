@@ -5,14 +5,14 @@ import org.lwjgl.util.vector.Vector3f;
 
 import game.DisplayManager;
 
-public class ParticleSystem {
+public abstract class ParticleSystem {
 
-    private float pps;
-    private float speed;
-    private float gravityComplient;
-    private float lifeLength;
+    protected float pps;
+    protected float speed;
+    protected float gravityComplient;
+    protected float lifeLength;
 
-    private ParticleTexture systemTexture;
+    protected ParticleTexture systemTexture;
 
     public ParticleSystem(ParticleTexture systemTexture, float pps, float speed, float gravityComplient, float lifeLength) {
         this.systemTexture = systemTexture;
@@ -35,7 +35,7 @@ public class ParticleSystem {
         }
     }
 
-    private void emitParticle(Vector3f center){
+    protected void emitParticle(Vector3f center){
         float dirX = randomWithRange(-40,40);
         float dirZ = randomWithRange(-40,40);
         float dirY = randomWithRange(80,1000);
@@ -51,7 +51,7 @@ public class ParticleSystem {
         this.pps = pps;
     }
 
-    private float randomWithRange(float min, float max)
+    protected float randomWithRange(float min, float max)
     {
         float range = (float) Math.abs(max - min);
         return (float) ((float) (Math.random() * range) + (min <= max ? min : max));
