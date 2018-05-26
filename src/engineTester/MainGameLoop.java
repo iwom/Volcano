@@ -54,14 +54,14 @@ public class MainGameLoop {
         Random random = new Random();
 
         float x = 0.0f;
-        float y = -2.0f;
+        float y = -4.0f;
         float z = -10.0f;
         entities.add(new Entity(volcanoModel, new Vector3f(x,y,z),
                 0,0,0,1));
 
-        for(int i = 0; i < 1000; i++) {
+        for(int i = 0; i < 5000; i++) {
             entities.add(new Entity(grassModel, new Vector3f(
-                    random.nextFloat() * 300 - 150, 0, random.nextFloat() * 300 -150), 0,0,0,0.8f
+                    random.nextFloat() * 160 - 80, 0, random.nextFloat() * 160 - 80), 0,0,0,0.1f
             ));
         }
 
@@ -69,19 +69,19 @@ public class MainGameLoop {
 
         ParticleMaster.init(loader, renderer.getProjectionMatrix());
         ParticleTexture particleTexture = new ParticleTexture(loader.loadTexture("particleAtlas"), 4);
-        ParticleSystem system = new ParticleSystem(particleTexture, 800, 0.3f, 0.5f, 0.04f);
-
+        ParticleSystem system = new ParticleSystem(particleTexture, 3000, 0.24f, 0.5f, 0.03f);
+        int pps = 7000;
         while(!Display.isCloseRequested()) {
             camera.move();
 
-            /*if(Keyboard.isKeyDown(Keyboard.KEY_Y)) {
-                 ParticleMaster.addParticle(new Particle(new Vector3f(entities.get(0).getPosition().x,
-                         entities.get(0).getPosition().y + 10.0f,
-                         entities.get(0).getPosition().z - 10.0f),
-                        new Vector3f(0,0.5f,0),
-                        1.0f,4.0f,0,1));
-
-            }*/
+            if(Keyboard.isKeyDown(Keyboard.KEY_Y)) {
+                pps += 10;
+                system.setPps(pps);
+            }
+            if(Keyboard.isKeyDown(Keyboard.KEY_U)) {
+               pps -= 10;
+               system.setPps(pps);
+            }
             system.generateParticles(new Vector3f(entities.get(0).getPosition().x - 2.3f,
                     entities.get(0).getPosition().y + 5.8f,
                     entities.get(0).getPosition().z));
