@@ -5,14 +5,14 @@ import org.lwjgl.util.vector.Vector3f;
 
 import game.DisplayManager;
 
-public class ParticleSystem {
+public abstract class ParticleSystem {
 
-    private float pps;
-    private float speed;
-    private float gravityComplient;
-    private float lifeLength;
+    protected float pps;
+    protected float speed;
+    protected float gravityComplient;
+    protected float lifeLength;
 
-    private ParticleTexture systemTexture;
+    protected ParticleTexture systemTexture;
 
     public ParticleSystem(ParticleTexture systemTexture, float pps, float speed, float gravityComplient, float lifeLength) {
         this.systemTexture = systemTexture;
@@ -35,15 +35,26 @@ public class ParticleSystem {
         }
     }
 
-    private void emitParticle(Vector3f center){
-        float dirX = (float) Math.random() * 2f - 1f;
-        float dirZ = (float) Math.random() * 2f - 1f;
-        Vector3f velocity = new Vector3f(dirX, 5f, dirZ);
+    protected void emitParticle(Vector3f center){
+        float dirX = randomWithRange(-40,40);
+        float dirZ = randomWithRange(-40,40);
+        float dirY = randomWithRange(80,1000);
+        Vector3f velocity = new Vector3f(dirX, dirY, dirZ);
 
         velocity.normalise();
         velocity.scale(speed);
         System.out.println(velocity.toString());
         new Particle(systemTexture, new Vector3f(center), velocity, gravityComplient, lifeLength, 0, 1);
+    }
+
+    public void setPps (float pps) {
+        this.pps = pps;
+    }
+
+    protected float randomWithRange(float min, float max)
+    {
+        float range = (float) Math.abs(max - min);
+        return (float) ((float) (Math.random() * range) + (min <= max ? min : max));
     }
 
 
