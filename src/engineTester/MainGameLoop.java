@@ -23,12 +23,17 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
         Loader loader = new Loader();
 
-        RawModel volcanoRawModel = OBJLoader.loadObjModel("volcano", loader);
-        ModelTexture volacnoTexture = new ModelTexture(loader.loadTexture("gravel"));
-        volacnoTexture.setShineDamper(20);
-        volacnoTexture.setReflectivity(0);
+        RawModel volcanoRawModel = OBJLoader.loadObjModel("vol4", loader);
+        ModelTexture volacnoTexture = new ModelTexture(loader.loadTexture("stone"));
+        //volacnoTexture.setShineDamper(20);
+        //volacnoTexture.setReflectivity(0);
         TexturedModel volcanoModel = new TexturedModel(volcanoRawModel, volacnoTexture);
 
+        /*RawModel stoneRawModel = OBJLoader.loadObjModel("stone", loader);
+        ModelTexture stoneTexture = new ModelTexture(loader.loadTexture("gravel"));
+        stoneTexture.setReflectivity(0);
+        stoneTexture.setShineDamper(10);
+        TexturedModel stoneModel = new TexturedModel(stoneRawModel, stoneTexture);*/
 
 
         RawModel grassRawModel = OBJLoader.loadObjModel("grassModel", loader);
@@ -52,7 +57,7 @@ public class MainGameLoop {
         Random random = new Random();
 
         float x = 0.0f;
-        float y = -4.0f;
+        float y = 2.0f;
         float z = -10.0f;
         entities.add(new Entity(volcanoModel, new Vector3f(x,y,z),
                 0,0,0,1));
