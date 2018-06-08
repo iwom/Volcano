@@ -28,4 +28,10 @@ public class Maths {
         Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
         return viewMatrix;
     }
+
+    public static float randomWithRange(float min, float max)
+    {
+        float range = (float) Math.abs(max - min);
+        return (float) ((float) (Math.random() * range) + (min <= max ? min : max));
+    }
 }

@@ -21,7 +21,6 @@ public class Camera {
 
     public void move() {
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-            //position.z -= 0.04f;
             position.x += Math.sin(Math.toRadians(yaw)) * CAMERA_SPEED;
             position.z -= Math.cos(Math.toRadians(yaw)) * CAMERA_SPEED;
         }

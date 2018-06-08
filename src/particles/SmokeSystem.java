@@ -1,6 +1,7 @@
 package particles;
 
 import org.lwjgl.util.vector.Vector3f;
+import toolbox.Maths;
 
 public class SmokeSystem extends ParticleSystem {
 
@@ -10,9 +11,9 @@ public class SmokeSystem extends ParticleSystem {
 
     @Override
     protected void emitParticle(Vector3f center) {
-        float dirX = randomWithRange(40, 500);
-        float dirZ = randomWithRange(40, 400);
-        float dirY = randomWithRange(30, 100);
+        float dirX = Maths.randomWithRange(40, 500);
+        float dirZ = Maths.randomWithRange(40, 400);
+        float dirY = Maths.randomWithRange(30, 100);
         Vector3f velocity = new Vector3f(dirX, dirY, dirZ);
         velocity.normalise();
         velocity.scale(speed);

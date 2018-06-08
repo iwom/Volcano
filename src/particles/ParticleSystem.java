@@ -4,6 +4,7 @@ package particles;
 import org.lwjgl.util.vector.Vector3f;
 
 import game.DisplayManager;
+import toolbox.Maths;
 
 public abstract class ParticleSystem {
 
@@ -36,14 +37,14 @@ public abstract class ParticleSystem {
     }
 
     protected void emitParticle(Vector3f center){
-        float dirX = randomWithRange(-40,40);
-        float dirZ = randomWithRange(-40,40);
-        float dirY = randomWithRange(80,1000);
+        float dirX = Maths.randomWithRange(-80,80);
+        float dirZ = Maths.randomWithRange(-80,80);
+        float dirY = Maths.randomWithRange(80,800);
         Vector3f velocity = new Vector3f(dirX, dirY, dirZ);
 
         velocity.normalise();
         velocity.scale(speed);
-        System.out.println(velocity.toString());
+        //System.out.println(velocity.toString());
         new Particle(systemTexture, new Vector3f(center), velocity, gravityComplient, lifeLength, 0, 1);
     }
 
@@ -51,12 +52,17 @@ public abstract class ParticleSystem {
         this.pps = pps;
     }
 
-    protected float randomWithRange(float min, float max)
-    {
-        float range = (float) Math.abs(max - min);
-        return (float) ((float) (Math.random() * range) + (min <= max ? min : max));
+
+
+    public void setGravityComplient(float gravityComplient) {
+        this.gravityComplient = gravityComplient;
     }
 
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
 
-
+    public void setLifeLength(float lifeLength) {
+        this.lifeLength = lifeLength;
+    }
 }
